@@ -28,6 +28,11 @@ html, body, #root { margin: 0; height: 100%; font-family: system-ui, sans-serif;
 .hud-title { font-weight: 700; margin-bottom: 4px; }
 .hud-sep { border-top: 1px solid #e5e7eb; margin: 8px 0; }
 .hud .bad { color: #c00; }
+.legend { display: flex; gap: 12px; margin-top: 4px; color: #555; }
+.legend .line { display: inline-block; width: 18px; border-top: 2px solid #b1b1b7; vertical-align: middle; }
+.legend .line.dashed { border-top-style: dashed; border-color: #c94f9b; }
+.react-flow__edge.dotted path { stroke-dasharray: 6 4; stroke-width: 1.5; }
+
 .controls { display: flex; flex-direction: column; gap: 4px; }
 .controls label { display: flex; align-items: center; gap: 6px; }
 .controls select { margin-left: auto; }

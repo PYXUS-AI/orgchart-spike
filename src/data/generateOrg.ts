@@ -8,6 +8,7 @@ export type Person = {
   dept: string;
   level: number; // 0 = CEO
   managerId: string | null;
+  dottedManagerId: string | null; // matrix org: secondary (dotted-line) manager in another dept
 };
 
 const DEPTS = ['Engineering', 'Sales', 'Marketing', 'Finance', 'People', 'Operations', 'Product', 'Support'];
@@ -30,28 +31,48 @@ export function generateOrg(n: number, seed = 42): Person[] {
   const people: Person[] = [];
   const queue: Person[] = [];
 
-  const ceo: Person = { id: 'p0', name: 'Alex Founder', title: 'CEO', dept: 'Executive', level: 0, managerId: null };
+  const ceo: Person = { id: 'p0', name: 'Alex Founder', title: 'CEO', dept: 'Executive', level: 0, managerId: null, dottedManagerId: null };
   people.push(ceo);
   queue.push(ceo);
 
   while (people.length < n && queue.length) {
     const mgr = queue.shift()!;
-    // Branching: wide at the top, narrower below -> depth ~6 for 2k, ~7 for 5k.
-    const kids = mgr.level === 0 ? DEPTS.length : mgr.level < 3 ? 3 + Math.floor(rnd() * 4) : 2 + Math.floor(rnd() * 6);
+    const kids = mgr.level === 0 ? DEPTS.length : 2 + Math.floor(rnd() * 5);
     for (let k = 0; k < kids && people.length < n; k++) {
       const level = mgr.level + 1;
       const dept = mgr.level === 0 ? DEPTS[k % DEPTS.length] : mgr.dept;
+      // Below the VPs a good share of people are individual contributors with no
+      // reports, so branches end at different depths instead of one huge bottom row.
+      const isManager = level <= 1 || rnd() < 0.55;
       const p: Person = {
         id: `p${people.length}`,
         name: `${pick(FIRST)} ${pick(LAST)}`,
-        title: TITLES[Math.min(level, TITLES.length - 1)],
+        title: isManager ? TITLES[Math.min(level, 5)] : rnd() < 0.4 ? 'Senior IC' : 'IC',
         dept,
         level,
         managerId: mgr.id,
+        dottedManagerId: null,
       };
       people.push(p);
-      queue.push(p);
+      if (isManager) queue.push(p);
     }
+  }
+
+  // ~3% of people below the VPs also report (dotted line) to a manager one or two
+  // levels up in a different department.
+  const hasReports = new Set(people.map((p) => p.managerId));
+  const managersByLevel = new Map<number, Person[]>();
+  for (const p of people) {
+    if (!hasReports.has(p.id) || p.level === 0) continue;
+    if (!managersByLevel.has(p.level)) managersByLevel.set(p.level, []);
+    managersByLevel.get(p.level)!.push(p);
+  }
+  for (const p of people) {
+    if (p.level < 2 || rnd() >= 0.03) continue;
+    const pool = [...(managersByLevel.get(p.level - 1) ?? []), ...(managersByLevel.get(p.level - 2) ?? [])].filter(
+      (m) => m.dept !== p.dept,
+    );
+    if (pool.length) p.dottedManagerId = pick(pool).id;
   }
   return people;
 }

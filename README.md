@@ -25,6 +25,8 @@ Everything is configurable from the panel (top-left) or the URL:
 | `virt` | `1` | `onlyRenderVisibleElements` (React Flow virtualization) |
 | `lod` | `1` | semantic zoom: CSS-only level of detail driven by zoom |
 | `minimap` | `0` | show MiniMap |
+| `compact` | `1` | narrow chart: people with no reports stacked in columns, and from level 3 down each team drawn as an indented (hanging) tree |
+| `dotted` | `1` | draw dotted-line (matrix) reports to managers in other departments |
 
 Example: `http://localhost:5173/?n=5000&virt=0`
 

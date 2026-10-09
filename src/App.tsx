@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ReactFlow, Background, MiniMap, type Edge, type Viewport } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import './styles.css';
-import { generateOrg } from './data/generateOrg';
+import { DEPT_COLORS, generateOrg } from './data/generateOrg';
 import { layoutOrg, NODE_H, NODE_W, type Algo } from './layout/elk';
 import { PersonNode, type PersonNodeType } from './nodes/PersonNode';
 import { useFps, useHeapMB } from './hud/useFps';
@@ -15,6 +15,8 @@ const CONFIG = {
   lod: params.get('lod') !== '0', // semantic zoom via CSS
   algo: (params.get('algo') ?? 'mrtree') as Algo,
   minimap: params.get('minimap') === '1',
+  compact: params.get('compact') !== '0', // stacked columns + hanging teams (narrow chart)
+  dotted: params.get('dotted') !== '0', // dotted-line (matrix) reporting edges
 };
 
 const nodeTypes = { person: PersonNode };
@@ -45,7 +47,7 @@ export default function App() {
     (async () => {
       const people = generateOrg(CONFIG.n);
       setStatus(`laying out ${people.length} nodes with ELK (${CONFIG.algo}) in a worker…`);
-      const { positions, ms } = await layoutOrg(people, CONFIG.algo);
+      const { positions, inbound, ms } = await layoutOrg(people, CONFIG.algo, CONFIG.compact);
       if (cancelled) return;
       const pos = new Map(positions.map((p) => [p.id, p]));
       const ns: PersonNodeType[] = people.map((p) => ({
@@ -56,9 +58,31 @@ export default function App() {
         height: NODE_H,
         data: p,
       }));
+      const byId = new Map(people.map((p) => [p.id, p]));
       const es: Edge[] = people
         .filter((p) => p.managerId)
-        .map((p) => ({ id: `e-${p.id}`, source: p.managerId!, target: p.id, type: 'smoothstep' }));
+        .map((p) => ({
+          id: `e-${p.id}`,
+          source: p.managerId!,
+          target: p.id,
+          sourceHandle: inbound.get(p.id) === 'rail' ? 'rail' : 'bottom',
+          targetHandle: inbound.get(p.id) === 'top' ? 'top' : 'left',
+          type: 'smoothstep',
+        }));
+      if (CONFIG.dotted) {
+        for (const p of people) {
+          if (!p.dottedManagerId) continue;
+          es.push({
+            id: `d-${p.id}`,
+            source: p.dottedManagerId,
+            target: p.id,
+            sourceHandle: 'bottom',
+            targetHandle: 'top',
+            className: 'dotted',
+            style: { stroke: DEPT_COLORS[byId.get(p.dottedManagerId)!.dept] },
+          });
+        }
+      }
       spike.layoutMs = Math.round(ms);
       spike.nodes = ns.length;
       spike.edges = es.length;
@@ -120,6 +144,10 @@ export default function App() {
         <div>first full render: <b>{hud.firstRenderMs} ms</b> since script start</div>
         <div>FPS: <b className={fps && fps < 30 ? 'bad' : ''}>{fps}</b></div>
         <div>JS heap: <b>{heap ?? 'n/a'} MB</b></div>
+        <div className="legend">
+          <span><i className="line" /> reports to</span>
+          <span><i className="line dashed" /> dotted line (matrix)</span>
+        </div>
         <div className="hud-sep" />
         <Controls />
       </div>
@@ -150,6 +178,8 @@ function Controls() {
       </label>
       <label><input type="checkbox" checked={CONFIG.virt} onChange={(e) => set('virt', e.target.checked ? '1' : '0')} /> virtualize (onlyRenderVisibleElements)</label>
       <label><input type="checkbox" checked={CONFIG.lod} onChange={(e) => set('lod', e.target.checked ? '1' : '0')} /> semantic zoom (CSS LOD)</label>
+      <label><input type="checkbox" checked={CONFIG.compact} onChange={(e) => set('compact', e.target.checked ? '1' : '0')} /> compact (columns + hanging teams)</label>
+      <label><input type="checkbox" checked={CONFIG.dotted} onChange={(e) => set('dotted', e.target.checked ? '1' : '0')} /> dotted-line reports</label>
       <label><input type="checkbox" checked={CONFIG.minimap} onChange={(e) => set('minimap', e.target.checked ? '1' : '0')} /> minimap</label>
     </div>
   );

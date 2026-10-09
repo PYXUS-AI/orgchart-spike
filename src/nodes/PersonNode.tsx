@@ -10,13 +10,16 @@ export type PersonNodeType = Node<Person, 'person'>;
 function PersonNodeImpl({ data }: NodeProps<PersonNodeType>) {
   return (
     <div className="person" style={{ borderLeftColor: DEPT_COLORS[data.dept] ?? '#999' }}>
-      <Handle type="target" position={Position.Top} className="handle" />
+      <Handle type="target" id="top" position={Position.Top} className="handle" />
+      <Handle type="target" id="left" position={Position.Left} className="handle" />
       <div className="person-text">
         <div className="person-name">{data.name}</div>
         <div className="person-title">{data.title} · {data.dept}</div>
       </div>
       <div className="person-block" style={{ background: DEPT_COLORS[data.dept] ?? '#999' }} />
-      <Handle type="source" position={Position.Bottom} className="handle" />
+      <Handle type="source" id="bottom" position={Position.Bottom} className="handle" />
+      {/* Lines a hanging team's left rail up with the indent of the rows below. */}
+      <Handle type="source" id="rail" position={Position.Bottom} className="handle" style={{ left: 12 }} />
     </div>
   );
 }
