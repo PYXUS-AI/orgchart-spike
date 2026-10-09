@@ -1,0 +1,74 @@
+[
+  {
+    "variant": "n=2000&virt=1&lod=1",
+    "cpu": "4x",
+    "nodes": 2000,
+    "edges": 1999,
+    "layoutMs": 2956,
+    "firstRenderMs": 3512,
+    "domNodesRendered": 182,
+    "domTotal": 6335,
+    "pan": {
+      "fps": 16.7,
+      "p5fps": 7,
+      "p95ms": 143.7,
+      "frames": 350
+    },
+    "zoom": {
+      "fps": 37.5,
+      "p5fps": 14.3,
+      "p95ms": 70.1,
+      "frames": 253
+    },
+    "longTasks": 138,
+    "heapMB": 16
+  },
+  {
+    "variant": "n=2000&virt=0&lod=1",
+    "cpu": "4x",
+    "nodes": 2000,
+    "edges": 1999,
+    "layoutMs": 3177,
+    "firstRenderMs": 3629,
+    "domNodesRendered": 2000,
+    "domTotal": 32147,
+    "pan": {
+      "fps": 5.5,
+      "p5fps": 1.9,
+      "p95ms": 523.2,
+      "frames": 381
+    },
+    "zoom": {
+      "fps": 6.2,
+      "p5fps": 2.5,
+      "p95ms": 404.6,
+      "frames": 176
+    },
+    "longTasks": 280,
+    "heapMB": 67
+  },
+  {
+    "variant": "n=5000&virt=1&lod=1",
+    "cpu": "4x",
+    "nodes": 5000,
+    "edges": 4999,
+    "layoutMs": 11286,
+    "firstRenderMs": 11603,
+    "domNodesRendered": 187,
+    "domTotal": 3195,
+    "pan": {
+      "fps": 12.3,
+      "p5fps": 5.2,
+      "p95ms": 194.1,
+      "frames": 319
+    },
+    "zoom": {
+      "fps": 30,
+      "p5fps": 11.3,
+      "p95ms": 88.2,
+      "frames": 252
+    },
+    "longTasks": 156,
+    "heapMB": 15
+  }
+]

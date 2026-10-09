@@ -1,0 +1,122 @@
+[
+  {
+    "variant": "n=2000&virt=1&lod=1",
+    "cpu": "1x",
+    "nodes": 2000,
+    "edges": 1999,
+    "layoutMs": 2545,
+    "firstRenderMs": 2658,
+    "domNodesRendered": 182,
+    "domTotal": 7063,
+    "pan": {
+      "fps": 40.2,
+      "p5fps": 19,
+      "p95ms": 52.5,
+      "frames": 346
+    },
+    "zoom": {
+      "fps": 49.5,
+      "p5fps": 19.2,
+      "p95ms": 52.1,
+      "frames": 253
+    },
+    "longTasks": 0,
+    "heapMB": 38
+  },
+  {
+    "variant": "n=2000&virt=0&lod=1",
+    "cpu": "1x",
+    "nodes": 2000,
+    "edges": 1999,
+    "layoutMs": 2652,
+    "firstRenderMs": 2749,
+    "domNodesRendered": 2000,
+    "domTotal": 32147,
+    "pan": {
+      "fps": 20.6,
+      "p5fps": 9.4,
+      "p95ms": 106.8,
+      "frames": 356
+    },
+    "zoom": {
+      "fps": 29.4,
+      "p5fps": 12.9,
+      "p95ms": 77.6,
+      "frames": 250
+    },
+    "longTasks": 170,
+    "heapMB": 74
+  },
+  {
+    "variant": "n=2000&virt=1&lod=0",
+    "cpu": "1x",
+    "nodes": 2000,
+    "edges": 1999,
+    "layoutMs": 2748,
+    "firstRenderMs": 2927,
+    "domNodesRendered": 182,
+    "domTotal": 3143,
+    "pan": {
+      "fps": 33.9,
+      "p5fps": 18.1,
+      "p95ms": 55.3,
+      "frames": 340
+    },
+    "zoom": {
+      "fps": 49,
+      "p5fps": 19.2,
+      "p95ms": 52,
+      "frames": 250
+    },
+    "longTasks": 2,
+    "heapMB": 15
+  },
+  {
+    "variant": "n=5000&virt=1&lod=1",
+    "cpu": "1x",
+    "nodes": 5000,
+    "edges": 4999,
+    "layoutMs": 7806,
+    "firstRenderMs": 7942,
+    "domNodesRendered": 187,
+    "domTotal": 67763,
+    "pan": {
+      "fps": 36.9,
+      "p5fps": 19,
+      "p95ms": 52.6,
+      "frames": 358
+    },
+    "zoom": {
+      "fps": 51.5,
+      "p5fps": 28.3,
+      "p95ms": 35.3,
+      "frames": 273
+    },
+    "longTasks": 0,
+    "heapMB": 99
+  },
+  {
+    "variant": "n=2000&virt=1&lod=1&algo=layered",
+    "cpu": "1x",
+    "nodes": 2000,
+    "edges": 1999,
+    "layoutMs": 3202,
+    "firstRenderMs": 3351,
+    "domNodesRendered": 474,
+    "domTotal": 20511,
+    "pan": {
+      "fps": 15.9,
+      "p5fps": 10.6,
+      "p95ms": 94.7,
+      "frames": 257
+    },
+    "zoom": {
+      "fps": 38.7,
+      "p5fps": 14.3,
+      "p95ms": 69.9,
+      "frames": 225
+    },
+    "longTasks": 111,
+    "heapMB": 52
+  }
+]
